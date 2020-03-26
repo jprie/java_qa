@@ -1,0 +1,23 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+.square-view {
+
+	-fx-background-image: url("/at/wifiwien/javaswe/strawberry_fields/images/grass_128px.png");
+	-fx-border-color: green;
+}
+
+.field-view {
+	-fx-background-color: brown;
+	-fx-pref-tile-height: 80px;
+	-fx-pref-tile-width: 80px;
+}
+
+.item-view {
+	
+	
+}
+
+.button {
+	-fx-background-color: #13FE14;
+}
+
