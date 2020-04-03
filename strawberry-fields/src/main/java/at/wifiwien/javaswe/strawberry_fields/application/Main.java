@@ -7,9 +7,6 @@ import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
-
 public class Main extends Application {
 
 	

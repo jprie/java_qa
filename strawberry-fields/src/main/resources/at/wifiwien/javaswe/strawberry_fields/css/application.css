@@ -2,7 +2,7 @@
 
 .square-view {
 
-	-fx-background-image: url("/at/wifiwien/javaswe/strawberry_fields/images/grass_128px.png");
+	-fx-background-image: url("../images/grass_128px.png");
 	-fx-border-color: green;
 }
 
