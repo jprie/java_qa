@@ -2,10 +2,12 @@ package at.wifiwien.javaswe.strawberry_fields.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import at.wifiwien.javaswe.strawberry_fields.model.Game;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class GameInfoController {
+public class GameInfoController extends CommonPropertiesController {
 
     @FXML
     private ResourceBundle resources;
@@ -46,13 +48,13 @@ public class GameInfoController {
 	private void initUIElements() {
 	
 		// set player names
-		namePlayer1Label.setText("Jan" + ":");
-		namePlayer2Label.setText("Birgit" + ":");
+		namePlayer1Label.textProperty().bind(game.getPlayers().get(Game.INDEX_PLAYER1).nameProperty().concat(":"));
+		namePlayer2Label.textProperty().bind(game.getPlayers().get(Game.INDEX_PLAYER2).nameProperty().concat(":"));
 		
 		// set game scores
-		scorePlayer1Label.setText("0");
-		scorePlayer2Label.setText("0");
-		numberStrawberriesLeftLabel.setText("20");
+		scorePlayer1Label.textProperty().bind(game.getPlayers().get(Game.INDEX_PLAYER1).scoreProperty().asString());
+		scorePlayer2Label.textProperty().bind(game.getPlayers().get(Game.INDEX_PLAYER2).scoreProperty().asString());
+		numberStrawberriesLeftLabel.textProperty().bind(game.strawberriesLeftProperty().asString());
 		
 	}
 }

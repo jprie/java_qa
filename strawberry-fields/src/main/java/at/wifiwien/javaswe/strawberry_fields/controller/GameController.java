@@ -5,7 +5,7 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
 
-public class GameController {
+public class GameController extends CommonPropertiesController {
 
     @FXML
     private ResourceBundle resources;

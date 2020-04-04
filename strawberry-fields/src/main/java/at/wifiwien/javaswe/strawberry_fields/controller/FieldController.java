@@ -4,13 +4,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import at.wifiwien.javaswe.strawberry_fields.application.Constants;
 import at.wifiwien.javaswe.strawberry_fields.model.Square;
 import at.wifiwien.javaswe.strawberry_fields.model.Square.Item;
 import javafx.beans.Observable;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -21,7 +20,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.TilePane;
 
-public class FieldController {
+public class FieldController extends CommonPropertiesController {
 
 	public static int WIDTH = 15;
 	public static int HEIGHT = 10;
@@ -34,8 +33,6 @@ public class FieldController {
 
 	@FXML
 	private TilePane fieldView;
-
-	private List<Square> squaresFromModel;
 	
 	private ObservableList<Square> squares;
 
@@ -44,7 +41,8 @@ public class FieldController {
         assert fieldView != null : "fx:id=\"fieldView\" was not injected: check your FXML file 'Field.fxml'.";
         fieldView.setPrefColumns(WIDTH);
         
-        initModel();
+        // init the new model
+        game.init();
         
         // add callback to squares
         squares = FXCollections.observableArrayList((square) -> new Observable[] { square.itemProperty() });
@@ -63,41 +61,19 @@ public class FieldController {
 			}
 		});
         
-        // add model data
-        squares.addAll(squaresFromModel);
+        // bind model data
+        Bindings.bindContentBidirectional(squares, game.getField().getSquares());
         
         
-        
-        assert(squares.size() == WIDTH*HEIGHT);
+        assert(squares.size() == game.getField().getHeight() * game.getField().getWidth());
         
         generateSquares();
-        
-//        squares.get(20).setItem(Item.STRAWBERRY);
-//        
-//        updateSquare(20);
-//        
+       
         fieldView.setOnKeyPressed(this::handleKeyPressedOnField);
         
-        // This does not work, since stage and scene have not been created yet
-        // fieldView.requestFocus();
         
         fieldView.sceneProperty().addListener(this::handleSceneInvalidated);
     }
-
-	/**
-	 * Initialize the smallest possible model with squares
-	 */
-	private void initModel() {
-		
-		squaresFromModel = Stream.generate(() -> new Square(Square.Item.EMPTY)).limit(WIDTH * HEIGHT)
-				.collect(Collectors.toList()); 
-		
-		squaresFromModel.set(0, new Square(Item.PIECE_PLAYER1));
-		squaresFromModel.set(WIDTH * HEIGHT - 1, new Square(Item.PIECE_PLAYER2));
-
-		squaresFromModel.set(17, new Square(Item.STRAWBERRY));
-		squaresFromModel.set(37, new Square(Item.STRAWBERRY));
-	}
 
 	/**
 	 * Generate squares to fill the field with imageViews where an item is
@@ -108,10 +84,13 @@ public class FieldController {
 		StackPane squareView;
 		List<StackPane> squareViews = new ArrayList<>();
 
-		for (int row = 0; row < HEIGHT; row++) {
-			for (int col = 0; col < WIDTH; col++) {
+		int height = game.getField().getHeight();
+		int width = game.getField().getWidth();
+		
+		for (int row = 0; row < height; row++) {
+			for (int col = 0; col < width; col++) {
 
-				ImageView itemView = itemViewForItem(squares.get(row * WIDTH + col));
+				ImageView itemView = itemViewForItem(squares.get(row * width + col));
 				
 				squareView = new StackPane(itemView);
 				squareView.getStyleClass().add("square-view");
