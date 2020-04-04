@@ -77,6 +77,11 @@ public class Game {
 		
 	}
 	
+	public void move(Move move) {
+		
+		
+	}
+	
 	public Field getField() {
 		
 		return field;
