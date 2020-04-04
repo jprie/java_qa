@@ -8,5 +8,8 @@ public class Constants {
 	
 	// path to css files
 	public static final String PATH_TO_APPLICATION_CSS = "/at/wifiwien/javaswe/strawberry_fields/css/application.css";
+
+	// paths to image files
+	public static final String PATH_TO_STRAWBERRY_IMAGE = "/at/wifiwien/javaswe/strawberry_fields/images/strawberry-transparent_128px.png";
 	
 }
