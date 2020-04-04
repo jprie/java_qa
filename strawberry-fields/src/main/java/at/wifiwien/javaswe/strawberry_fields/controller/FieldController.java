@@ -46,6 +46,10 @@ public class FieldController {
         
         generateSquares();
         
+        squares.get(20).setItem(Item.STRAWBERRY);
+        
+        updateSquare(20);
+        
         fieldView.setOnKeyPressed(this::handleKeyPressedOnField);
         
         // This does not work, since stage and scene have not been created yet
@@ -80,11 +84,8 @@ public class FieldController {
 		for (int row = 0; row < HEIGHT; row++) {
 			for (int col = 0; col < WIDTH; col++) {
 
-				String itemPath = imagePathForItem(squares.get(row * WIDTH + col).getItem());
-				Image itemImage = new Image(getClass().getResourceAsStream(itemPath));
-				ImageView itemView = new ImageView(itemImage);
-				itemView.setPreserveRatio(true);
-				itemView.setFitHeight(60);
+				ImageView itemView = itemViewForItem(squares.get(row * WIDTH + col));
+				
 				squareView = new StackPane(itemView);
 				squareView.getStyleClass().add("square-view");
 
@@ -96,6 +97,29 @@ public class FieldController {
 		fieldView.getChildren().addAll(squareViews);
 
 	}
+
+	private ImageView itemViewForItem(Square square) {
+		String itemPath = imagePathForItem(square.getItem());
+		Image itemImage = new Image(getClass().getResourceAsStream(itemPath));
+		ImageView itemView = new ImageView(itemImage);
+		itemView.setPreserveRatio(true);
+		itemView.setFitHeight(60);
+		return itemView;
+	}
+	
+	/**
+	 * Update the square at the given index
+	 * @param index
+	 */
+	private void updateSquare(int index) {
+		
+		StackPane squareView = (StackPane)fieldView.getChildren().get(index);
+		
+		squareView.getChildren().get(0);
+		squareView.getChildren().add(itemViewForItem(squares.get(index)));
+		
+	}
+	
 
 	/**
 	 * Get path for image corresponding to item
