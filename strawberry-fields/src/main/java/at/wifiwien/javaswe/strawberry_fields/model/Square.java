@@ -6,10 +6,22 @@ import javafx.beans.property.SimpleObjectProperty;
 public class Square {
 
 	public enum Item {
-		PIECE_PLAYER1,
-		PIECE_PLAYER2,
-		EMPTY,
-		STRAWBERRY
+		PIECE_PLAYER1("p"),
+		PIECE_PLAYER2("P"),
+		EMPTY(" "),
+		STRAWBERRY("s");
+		
+		private String face;
+		
+		private Item (String face) {
+			this.face = face;
+		}
+		
+		@Override
+		public String toString() {
+		
+			return face;
+		}
 	}
 	
 	ObjectProperty<Item> item = new SimpleObjectProperty<Square.Item>();
@@ -33,7 +45,11 @@ public class Square {
 		this.itemProperty().set(item);
 	}
 	
-
+	@Override
+	public String toString() {
+	
+		return item.get().toString();
+	}
 	
 	
 }
