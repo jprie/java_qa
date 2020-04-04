@@ -4,20 +4,55 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
+import at.wifiwien.javaswe.strawberry_fields.exception.MoveException;
 import at.wifiwien.javaswe.strawberry_fields.model.Square.Item;
 
 class TestModel {
 
 	@Test
-	void test() {
+	void testFieldInitialization() {
+
+		Game game = new Game();
+		game.init();
+
+		System.out.println(game.getField());
+
+		assertEquals(game.getField().getItemAtPosition(new Position(0, 0)), Item.PIECE_PLAYER1);
+	}
+
+	@Test
+	void testMoving() {
+
+		Game game = new Game();
+
+		game.init();
+
+		try {
+			game.move(new Move(1, Move.Direction.RIGHT));
+		} catch (MoveException e) {
+			System.out.println("Move could not be done: " + e.getMessage());
+		}
 		
+		assertEquals(game.getField().getItemAtPosition(new Position(1, 0)), Item.PIECE_PLAYER1);
+	}
+	
+	@Test
+	void testTogglePlayersTurn() {
+
 		Game game = new Game();
 		game.init();
 		
-		System.out.println(game.getField());
+		assertEquals(game.getPlayersTurn(), Game.INDEX_PLAYER1);
 		
+		try {
+			game.move(new Move(1, Move.Direction.RIGHT));
+		} catch (MoveException e) {
+			System.out.println("Move could not be done: " + e.getMessage());
+		}
 		
-		assertEquals(game.getField().getItemAtPosition(new Position(0, 0)), Item.PIECE_PLAYER1);
+		assertEquals(game.getPlayersTurn(), Game.INDEX_PLAYER2);
+
+		
 	}
 
 }

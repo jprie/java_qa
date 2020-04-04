@@ -7,7 +7,6 @@ import java.util.ResourceBundle;
 
 import at.wifiwien.javaswe.strawberry_fields.application.Constants;
 import at.wifiwien.javaswe.strawberry_fields.model.Square;
-import at.wifiwien.javaswe.strawberry_fields.model.Square.Item;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
@@ -16,7 +15,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.TilePane;
 
@@ -41,8 +39,6 @@ public class FieldController extends CommonPropertiesController {
         assert fieldView != null : "fx:id=\"fieldView\" was not injected: check your FXML file 'Field.fxml'.";
         fieldView.setPrefColumns(WIDTH);
         
-        // init the new model
-        game.init();
         
         // add callback to squares
         squares = FXCollections.observableArrayList((square) -> new Observable[] { square.itemProperty() });
@@ -68,11 +64,6 @@ public class FieldController extends CommonPropertiesController {
         assert(squares.size() == game.getField().getHeight() * game.getField().getWidth());
         
         generateSquares();
-       
-        fieldView.setOnKeyPressed(this::handleKeyPressedOnField);
-        
-        
-        fieldView.sceneProperty().addListener(this::handleSceneInvalidated);
     }
 
 	/**
@@ -104,6 +95,11 @@ public class FieldController extends CommonPropertiesController {
 
 	}
 
+	/**
+	 * Given a square returns an imageView
+	 * @param square
+	 * @return
+	 */
 	private ImageView itemViewForItem(Square square) {
 		String itemPath = imagePathForItem(square.getItem());
 		Image itemImage = new Image(getClass().getResourceAsStream(itemPath));
@@ -149,28 +145,4 @@ public class FieldController extends CommonPropertiesController {
 		return null;
 	}
 
-	public void handleKeyPressedOnField(KeyEvent event) {
-		
-		switch (event.getCode()) {
-		case UP:
-			System.out.println(event.getCode()); break;
-		case DOWN:
-			System.out.println(event.getCode()); break;
-		case LEFT:
-			System.out.println(event.getCode()); break;
-		case RIGHT:
-			Item item = squares.get(0).getItem();
-			squares.get(0).setItem(Item.EMPTY);
-			squares.get(1).setItem(item);
-			System.out.println(event.getCode()); break;
-		default:
-			System.out.println("Unsupported key pressed!");
-		}
-
-	}
-	
-	private void handleSceneInvalidated(Observable obs) {
-	
-		fieldView.requestFocus();
-	}
 }

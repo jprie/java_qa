@@ -1,10 +1,12 @@
 package at.wifiwien.javaswe.strawberry_fields.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import at.wifiwien.javaswe.strawberry_fields.exception.MoveException;
 import at.wifiwien.javaswe.strawberry_fields.model.Square.Item;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -19,9 +21,16 @@ public class Game {
 	private final int height;
 	private int numStrawberries;
 	
+	// game state
 	private Field field;
 	private List<Player> players;
-	private IntegerProperty strawberriesLeft = new SimpleIntegerProperty(); 
+	private List<Position> currentPositions;
+	private IntegerProperty strawberriesLeft = new SimpleIntegerProperty();
+	private IntegerProperty playersTurn = new SimpleIntegerProperty();
+	
+	
+	
+	
 	
 	/**
 	 * Create a new game and set a default configuration
@@ -54,6 +63,7 @@ public class Game {
 		
 		// create positions
 		List<Position> piecePositions = List.of(new Position(0, 0), new Position(width-1, height-1));
+		currentPositions = new ArrayList<>(piecePositions);
 		
 		
 		Random random = new Random();
@@ -77,11 +87,64 @@ public class Game {
 		
 	}
 	
-	public void move(Move move) {
+	/**
+	 * Moves a piece from its current position to a new position
+	 * @param move
+	 * @throws MoveException
+	 */
+	public void move(Move move) throws MoveException {
 		
+		Position src = currentPositions.get(playersTurn.get());
+		
+		Position dest = destinationFromMove(src, move);
+		
+		
+		Item item = field.removeItemFromPosition(src);
+		field.setItemAtPosition(dest, item);
+		
+		currentPositions.set(playersTurn.get(), dest);
+		
+		togglePlayersTurn();
 		
 	}
 	
+	/**
+	 * Toggles the players turn between 0 and 1
+	 */
+	private void togglePlayersTurn() {
+		
+		playersTurn.set((playersTurn.get() + 1) % 2);
+		
+	}
+
+	/**
+	 * Calculate destination position, given the src position and the requested move
+	 * @param src
+	 * @param move
+	 * @return
+	 */
+	private Position destinationFromMove(Position src, Move move) {
+		
+		int x = 0;
+		int y = 0;
+		
+		switch(move.direction) {
+		case UP:
+			y = -1; break;
+		case DOWN: 
+			y = 1; break;
+		case LEFT:
+			x = -1; break;
+		case RIGHT:
+			x = 1; break;
+		}
+		
+		x *= move.distance;
+		y *= move.distance;
+		
+		return new Position(src.x + x, src.y + y);
+	}
+
 	public Field getField() {
 		
 		return field;
@@ -104,6 +167,22 @@ public class Game {
 	public final void setStrawberriesLeft(final int strawberriesLeft) {
 		this.strawberriesLeftProperty().set(strawberriesLeft);
 	}
+
+	public final IntegerProperty playersTurnProperty() {
+		return this.playersTurn;
+	}
+	
+
+	public final int getPlayersTurn() {
+		return this.playersTurnProperty().get();
+	}
+	
+
+	public final void setPlayersTurn(final int playersTurn) {
+		this.playersTurnProperty().set(playersTurn);
+	}
+	
+	
 	
 	
 	

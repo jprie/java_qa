@@ -1,11 +1,15 @@
 package at.wifiwien.javaswe.strawberry_fields.model;
 
 public class Move {
+	
+	public enum Direction {
+		UP, DOWN, LEFT, RIGHT
+	}
 
 	public final int distance;
-	public final int direction;
+	public final Direction direction;
 	
-	public Move(int distance, int direction) {
+	public Move(int distance, Direction direction) {
 		
 		this.distance = distance;
 		this.direction = direction;
