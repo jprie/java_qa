@@ -11,6 +11,9 @@ import at.wifiwien.javaswe.strawberry_fields.application.Constants;
 import at.wifiwien.javaswe.strawberry_fields.model.Square;
 import at.wifiwien.javaswe.strawberry_fields.model.Square.Item;
 import javafx.beans.Observable;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -32,24 +35,47 @@ public class FieldController {
 	@FXML
 	private TilePane fieldView;
 
-	private List<Square> squares;
+	private List<Square> squaresFromModel;
+	
+	private ObservableList<Square> squares;
 
 	@FXML
     void initialize() {
         assert fieldView != null : "fx:id=\"fieldView\" was not injected: check your FXML file 'Field.fxml'.";
         fieldView.setPrefColumns(WIDTH);
         
-        
         initModel();
+        
+        // add callback to squares
+        squares = FXCollections.observableArrayList((square) -> new Observable[] { square.itemProperty() });
+        
+        // add listener for updates
+        squares.addListener(new ListChangeListener<Square>() {
+
+			@Override
+			public void onChanged(Change<? extends Square> c) {
+				while(c.next()) {
+					if (c.wasUpdated()) {
+						updateSquare(c.getFrom());
+					}
+				}
+				
+			}
+		});
+        
+        // add model data
+        squares.addAll(squaresFromModel);
+        
+        
         
         assert(squares.size() == WIDTH*HEIGHT);
         
         generateSquares();
         
-        squares.get(20).setItem(Item.STRAWBERRY);
-        
-        updateSquare(20);
-        
+//        squares.get(20).setItem(Item.STRAWBERRY);
+//        
+//        updateSquare(20);
+//        
         fieldView.setOnKeyPressed(this::handleKeyPressedOnField);
         
         // This does not work, since stage and scene have not been created yet
@@ -62,14 +88,15 @@ public class FieldController {
 	 * Initialize the smallest possible model with squares
 	 */
 	private void initModel() {
-		squares = Stream.generate(() -> new Square(Square.Item.EMPTY)).limit(WIDTH * HEIGHT)
-				.collect(Collectors.toList());
+		
+		squaresFromModel = Stream.generate(() -> new Square(Square.Item.EMPTY)).limit(WIDTH * HEIGHT)
+				.collect(Collectors.toList()); 
+		
+		squaresFromModel.set(0, new Square(Item.PIECE_PLAYER1));
+		squaresFromModel.set(WIDTH * HEIGHT - 1, new Square(Item.PIECE_PLAYER2));
 
-		squares.set(0, new Square(Item.PIECE_PLAYER1));
-		squares.set(WIDTH * HEIGHT - 1, new Square(Item.PIECE_PLAYER2));
-
-		squares.set(17, new Square(Item.STRAWBERRY));
-		squares.set(37, new Square(Item.STRAWBERRY));
+		squaresFromModel.set(17, new Square(Item.STRAWBERRY));
+		squaresFromModel.set(37, new Square(Item.STRAWBERRY));
 	}
 
 	/**
@@ -115,7 +142,7 @@ public class FieldController {
 		
 		StackPane squareView = (StackPane)fieldView.getChildren().get(index);
 		
-		squareView.getChildren().get(0);
+		squareView.getChildren().remove(0);
 		squareView.getChildren().add(itemViewForItem(squares.get(index)));
 		
 	}
@@ -144,7 +171,7 @@ public class FieldController {
 	}
 
 	public void handleKeyPressedOnField(KeyEvent event) {
-
+		
 		switch (event.getCode()) {
 		case UP:
 			System.out.println(event.getCode()); break;
@@ -153,6 +180,9 @@ public class FieldController {
 		case LEFT:
 			System.out.println(event.getCode()); break;
 		case RIGHT:
+			Item item = squares.get(0).getItem();
+			squares.get(0).setItem(Item.EMPTY);
+			squares.get(1).setItem(item);
 			System.out.println(event.getCode()); break;
 		default:
 			System.out.println("Unsupported key pressed!");
