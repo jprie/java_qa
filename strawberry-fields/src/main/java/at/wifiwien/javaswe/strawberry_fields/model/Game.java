@@ -23,6 +23,7 @@ public class Game {
 	private final int width;
 	private final int height;
 	private int numStrawberries;
+	private List<Position> initPositions;
 	
 	// game state
 	private Field field;
@@ -68,6 +69,7 @@ public class Game {
 		// create positions
 		List<Position> piecePositions = List.of(new Position(0, 0), new Position(width-1, height-1));
 		currentPositions = new ArrayList<>(piecePositions);
+		initPositions = new ArrayList<>(piecePositions);
 		
 		
 		Random random = new Random();
@@ -101,8 +103,9 @@ public class Game {
 	public void move(Move move) throws MoveException {
 		
 		Position src = currentPositions.get(playersTurn.get());
-		
 		Position dest = destinationFromMove(src, move);
+		
+		int indexOpponent = getOpponentIndex();
 
 		// check that src and dest are inside board
 		if (!field.positionInsideField(src) || !field.positionInsideField(dest)) {
@@ -135,13 +138,45 @@ public class Game {
 				
 				determineWinner();
 			}
-		} 
+			
+		// put opponent's piece back to init position
+		} else if (destItem == players.get(indexOpponent).getItem()) {
+			
+			// Note: Here we see that our design will not work for more the 2 players elegantly, because it is difficult to find out
+			// that we catch a (any) piece which is not ours. This is going to be easier if we have a class for pieces and strawberries
+			// and fences
+			
+			Position initPosition = initPositions.get(indexOpponent);
+			field.setItemAtPosition(initPosition, destItem);
+			
+			// update current position
+			currentPositions.set(indexOpponent, initPosition);
+			
+		}
 	
 		
 		togglePlayersTurn();
 		
 	}
 	
+	/**
+	 * Toggles the players turn between 0 and 1
+	 */
+	private void togglePlayersTurn() {
+		
+		playersTurn.set((playersTurn.get() + 1) % 2);
+		
+	}
+	
+	/**
+	 * Returns the opponents index
+	 * @return
+	 */
+	private int getOpponentIndex() {
+		
+		return (playersTurn.get() + 1) % 2;
+	}
+
 	/**
 	 * Determine which player got a higher score
 	 */
@@ -164,14 +199,7 @@ public class Game {
 		
 	}
 
-	/**
-	 * Toggles the players turn between 0 and 1
-	 */
-	private void togglePlayersTurn() {
-		
-		playersTurn.set((playersTurn.get() + 1) % 2);
-		
-	}
+	
 
 	/**
 	 * Calculate destination position, given the src position and the requested move
