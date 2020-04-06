@@ -69,6 +69,13 @@ public class Field {
 	public ObservableList<Square> getSquares() {
 		return squares;
 	}
+
+	public boolean positionInsideField(Position pos) {
+	 	
+		return pos.x < width  && pos.x >= 0 &&
+				pos.y < height && pos.y >= 0;
+		
+	}
 	
 	
 }

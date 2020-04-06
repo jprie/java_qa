@@ -4,9 +4,14 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import at.wifiwien.javaswe.strawberry_fields.application.Constants;
 import at.wifiwien.javaswe.strawberry_fields.model.Square;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
@@ -15,8 +20,15 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.TilePane;
+import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
 public class FieldController extends CommonPropertiesController {
 
@@ -143,6 +155,32 @@ public class FieldController extends CommonPropertiesController {
 		}
 
 		return null;
+	}
+	
+	
+	
+	public void animateRedBorder() {
+		
+		fieldView.setManaged(false);
+
+		int[] t = {-10};
+		
+		KeyFrame[] keyFrames = Stream.iterate(0, (i) -> i + 1)
+				.limit(10)
+				.map(i -> new Border(new BorderStroke(Color.ORANGERED, BorderStrokeStyle.SOLID, null, new BorderWidths(i))))
+				.map(b -> new KeyFrame(Duration.millis(t[0]+=10), new KeyValue(fieldView.borderProperty(), b)))
+				.collect(Collectors.toList()).toArray(new KeyFrame[5]);
+		
+		// reset counter
+		
+		Timeline timeline = new Timeline(keyFrames);
+		
+		timeline.setAutoReverse(true);
+		timeline.setCycleCount(2);
+		timeline.play();
+		
+		fieldView.setManaged(true);
+		
 	}
 
 }

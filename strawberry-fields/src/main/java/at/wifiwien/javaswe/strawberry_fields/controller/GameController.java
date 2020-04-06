@@ -3,14 +3,25 @@ package at.wifiwien.javaswe.strawberry_fields.controller;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import at.wifiwien.javaswe.strawberry_fields.exception.MoveException;
 import at.wifiwien.javaswe.strawberry_fields.model.Move;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.beans.Observable;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
 public class GameController extends CommonPropertiesController {
 
@@ -24,8 +35,12 @@ public class GameController extends CommonPropertiesController {
     private AnchorPane view;
 
     @FXML
+    private FieldController fieldController;
+    
+    @FXML
     void initialize() {
         assert view != null : "fx:id=\"view\" was not injected: check your FXML file 'Game.fxml'.";
+        assert fieldController != null : "fx:id=\"field\" was not injected: check your FXML file 'Game.fxml'.";
 
         view.setOnKeyPressed(this::handleKeyPressedOnField);
         
@@ -50,6 +65,8 @@ public class GameController extends CommonPropertiesController {
 
 			} catch (MoveException e) {
 				System.out.println("MoveException: " + e.getMessage());
+				
+				fieldController.animateRedBorder();
 
 			}
 

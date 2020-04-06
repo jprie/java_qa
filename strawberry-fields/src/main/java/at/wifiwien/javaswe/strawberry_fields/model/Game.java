@@ -97,7 +97,18 @@ public class Game {
 		Position src = currentPositions.get(playersTurn.get());
 		
 		Position dest = destinationFromMove(src, move);
+
+		// check that src and dest are inside board
+		if (!field.positionInsideField(src) || !field.positionInsideField(dest)) {
+			
+			throw new MoveException("source or destination outside of field");
+		}
 		
+		// check if type of item at src is piece
+		if (field.getItemAtPosition(src) != players.get(playersTurn.get()).getItem()) {
+			
+			throw new MoveException("Item at src position is not a piece of player" + (getPlayersTurn()+1));
+		}
 		
 		Item item = field.removeItemFromPosition(src);
 		field.setItemAtPosition(dest, item);
