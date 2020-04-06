@@ -1,10 +1,17 @@
 package at.wifiwien.javaswe.strawberry_fields.controller;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import at.wifiwien.javaswe.strawberry_fields.model.Game;
+import at.wifiwien.javaswe.strawberry_fields.model.Player;
+import javafx.beans.Observable;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 
 public class GameInfoController extends CommonPropertiesController {
@@ -43,6 +50,28 @@ public class GameInfoController extends CommonPropertiesController {
         assert numberStrawberriesLeftLabel != null : "fx:id=\"numberStrawberriesLeftLabel\" was not injected: check your FXML file 'GameInfo.fxml'.";
 
         initUIElements();
+        
+        game.winnerProperty().addListener(this::handleWinnerChanged);
+    }
+    
+    void handleWinnerChanged(ObservableValue<? extends Optional<Player>> winner, Optional<Player> oldPlayer, Optional<Player> newPlayer) {
+    	
+    	String contentText;
+    	
+    	if (newPlayer.isPresent()) {
+    		contentText = newPlayer.get().getName() + " wins!";	
+    	} else {
+    		contentText = "Draw";
+    	}
+    	
+    	ButtonType ok = new ButtonType("Ok", ButtonData.OK_DONE);
+    	
+    	Dialog<Integer> dialog = new Dialog<Integer>();
+    	dialog.setHeaderText("Game ended");
+    	dialog.setContentText(contentText);
+    	dialog.getDialogPane().getButtonTypes().add(ok);
+    	dialog.showAndWait();
+    	
     }
 
 	private void initUIElements() {
@@ -55,6 +84,10 @@ public class GameInfoController extends CommonPropertiesController {
 		scorePlayer1Label.textProperty().bind(game.getPlayers().get(Game.INDEX_PLAYER1).scoreProperty().asString());
 		scorePlayer2Label.textProperty().bind(game.getPlayers().get(Game.INDEX_PLAYER2).scoreProperty().asString());
 		numberStrawberriesLeftLabel.textProperty().bind(game.strawberriesLeftProperty().asString());
+		
+		// set players turn
+		namePlayer1Label.underlineProperty().bind(game.playersTurnProperty().isEqualTo(0));
+		namePlayer2Label.underlineProperty().bind(game.playersTurnProperty().greaterThan(0));
 		
 	}
 }

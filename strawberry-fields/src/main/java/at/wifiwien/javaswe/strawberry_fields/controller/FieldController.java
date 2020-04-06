@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 
 import at.wifiwien.javaswe.strawberry_fields.application.Constants;
 import at.wifiwien.javaswe.strawberry_fields.model.Square;
+import at.wifiwien.javaswe.strawberry_fields.model.Square.Item;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -89,7 +90,7 @@ public class FieldController extends CommonPropertiesController {
 
 		int height = game.getField().getHeight();
 		int width = game.getField().getWidth();
-		
+		int i = 0;
 		for (int row = 0; row < height; row++) {
 			for (int col = 0; col < width; col++) {
 
@@ -97,7 +98,7 @@ public class FieldController extends CommonPropertiesController {
 				
 				squareView = new StackPane(itemView);
 				squareView.getStyleClass().add("square-view");
-
+				if (squares.get(row * width + col).getItem() == Item.STRAWBERRY) System.out.println(i++);
 				squareViews.add(squareView);
 
 			}

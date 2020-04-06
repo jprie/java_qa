@@ -2,6 +2,7 @@ package at.wifiwien.javaswe.strawberry_fields.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -9,7 +10,9 @@ import java.util.stream.Stream;
 import at.wifiwien.javaswe.strawberry_fields.exception.MoveException;
 import at.wifiwien.javaswe.strawberry_fields.model.Square.Item;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 public class Game {
 	
@@ -27,7 +30,7 @@ public class Game {
 	private List<Position> currentPositions;
 	private IntegerProperty strawberriesLeft = new SimpleIntegerProperty();
 	private IntegerProperty playersTurn = new SimpleIntegerProperty();
-	
+	private ObjectProperty<Optional<Player>> winner = new SimpleObjectProperty<>();
 	
 	
 	
@@ -39,7 +42,7 @@ public class Game {
 	
 		this.width = 15;
 		this.height = 10;
-		this.numStrawberries = 20;
+		this.numStrawberries = 2;
 	}
 	
 	/**
@@ -52,6 +55,7 @@ public class Game {
 		field = new Field(width, height);
 		field.init();
 		
+		setStrawberriesLeft(numStrawberries);
 		layoutField();
 		
 	}
@@ -70,8 +74,10 @@ public class Game {
 		List<Position> strawberryPositions = Stream.generate(() -> new Position(random.nextInt(width), random.nextInt(height)))
 												.filter(pos -> !pos.equals(piecePositions.get(INDEX_PLAYER1)) &&
 																!pos.equals(piecePositions.get(INDEX_PLAYER2)))
+												.distinct()
 												.limit(numStrawberries)
 												.collect(Collectors.toList());
+		
 		
 		// layout items at positions
 		field.setItemAtPosition(piecePositions.get(INDEX_PLAYER1), players.get(INDEX_PLAYER1).getItem());
@@ -111,14 +117,53 @@ public class Game {
 		}
 		
 		Item item = field.removeItemFromPosition(src);
-		field.setItemAtPosition(dest, item);
+		Item destItem = field.getItemAtPosition(dest);
 		
+		field.setItemAtPosition(dest, item);
 		currentPositions.set(playersTurn.get(), dest);
+		
+		// increment score when moving over strawberry
+		if (destItem == Item.STRAWBERRY) {
+			
+			int currentScore = players.get(getPlayersTurn()).getScore();
+			players.get(getPlayersTurn()).setScore(currentScore+1);
+			int strawberryCount = getStrawberriesLeft();
+			setStrawberriesLeft(strawberryCount-1);
+			
+			// check if last strawberry taken
+			if (strawberriesLeft.isEqualTo(0).get()) {
+				
+				determineWinner();
+			}
+		} 
+	
 		
 		togglePlayersTurn();
 		
 	}
 	
+	/**
+	 * Determine which player got a higher score
+	 */
+	private void determineWinner() {
+		
+		Player optWinner;
+		
+		if (players.get(INDEX_PLAYER1).getScore() > players.get(INDEX_PLAYER2).getScore()) {
+			
+			optWinner = players.get(INDEX_PLAYER1);
+		} else if (players.get(INDEX_PLAYER2).getScore() > players.get(INDEX_PLAYER1).getScore()) {
+			
+			optWinner = players.get(INDEX_PLAYER2);
+		} else {
+			
+			optWinner = null;
+		}
+		
+		winner.set(Optional.ofNullable(optWinner));
+		
+	}
+
 	/**
 	 * Toggles the players turn between 0 and 1
 	 */
@@ -192,6 +237,21 @@ public class Game {
 	public final void setPlayersTurn(final int playersTurn) {
 		this.playersTurnProperty().set(playersTurn);
 	}
+
+	public final ObjectProperty<Optional<Player>> winnerProperty() {
+		return this.winner;
+	}
+	
+
+	public final Optional<Player> getWinner() {
+		return this.winnerProperty().get();
+	}
+	
+
+	public final void setWinner(final Optional<Player> winner) {
+		this.winnerProperty().set(winner);
+	}
+	
 	
 	
 	
