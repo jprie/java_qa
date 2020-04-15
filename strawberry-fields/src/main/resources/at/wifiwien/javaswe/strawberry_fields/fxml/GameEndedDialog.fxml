@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ButtonType?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1">
+   <children>
+      <DialogPane contentText="Player 1: Jan wins!!" headerText="Game ended">
+         <buttonTypes>
+            <ButtonType fx:constant="OK" />
+         </buttonTypes>
+      </DialogPane>
+   </children>
+</AnchorPane>

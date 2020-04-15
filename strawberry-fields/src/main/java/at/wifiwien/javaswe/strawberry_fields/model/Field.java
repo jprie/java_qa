@@ -1,6 +1,6 @@
 package at.wifiwien.javaswe.strawberry_fields.model;
 
-import at.wifiwien.javaswe.strawberry_fields.model.Square.Item;
+import at.wifiwien.javaswe.strawberry_fields.model.item.Item;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -21,7 +21,7 @@ public class Field {
 		for (int row=0; row < height; row++) {
 			for (int col=0; col <width; col++) {
 				
-				squares.add(new Square(Item.EMPTY));
+				squares.add(new Square());
 			}
 		}
 		
@@ -54,7 +54,7 @@ public class Field {
 	public Item removeItemFromPosition(Position pos) {
 		
 		Item item = squares.get(pos.y * width + pos.x).getItem();
-		squares.get(pos.y * width + pos.x).setItem(Item.EMPTY);
+		squares.get(pos.y * width + pos.x).setItem(null);
 		return item;
 	}
 

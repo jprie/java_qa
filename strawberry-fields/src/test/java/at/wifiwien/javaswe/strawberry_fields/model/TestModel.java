@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import at.wifiwien.javaswe.strawberry_fields.exception.MoveException;
-import at.wifiwien.javaswe.strawberry_fields.model.Square.Item;
 
 class TestModel {
 
@@ -17,7 +16,7 @@ class TestModel {
 
 		System.out.println(game.getField());
 
-		assertEquals(game.getField().getItemAtPosition(new Position(0, 0)), Item.PIECE_PLAYER1);
+		assertEquals(game.getField().getItemAtPosition(new Position(0, 0)), game.getPlayers().get(0).getItem());
 	}
 
 	@Test
@@ -33,7 +32,7 @@ class TestModel {
 			System.out.println("Move could not be done: " + e.getMessage());
 		}
 		
-		assertEquals(game.getField().getItemAtPosition(new Position(1, 0)), Item.PIECE_PLAYER1);
+		assertEquals(game.getField().getItemAtPosition(new Position(1, 0)), game.getPlayers().get(0).getItem());
 	}
 	
 	@Test

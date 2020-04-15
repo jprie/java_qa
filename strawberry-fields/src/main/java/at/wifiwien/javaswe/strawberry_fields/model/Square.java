@@ -1,34 +1,16 @@
 package at.wifiwien.javaswe.strawberry_fields.model;
 
+import at.wifiwien.javaswe.strawberry_fields.model.item.Item;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 public class Square {
-
-	public enum Item {
-		PIECE_PLAYER1("p"),
-		PIECE_PLAYER2("P"),
-		EMPTY(" "),
-		STRAWBERRY("s");
-		
-		private String face;
-		
-		private Item (String face) {
-			this.face = face;
-		}
-		
-		@Override
-		public String toString() {
-		
-			return face;
-		}
-	}
 	
-	ObjectProperty<Item> item = new SimpleObjectProperty<Square.Item>();
+	ObjectProperty<Item> item = new SimpleObjectProperty<>();
 
-	public Square(Item item) {
+	public Square() {
 		super();
-		this.item.set(item);
+		
 	}
 
 	public final ObjectProperty<Item> itemProperty() {

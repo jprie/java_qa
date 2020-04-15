@@ -2,6 +2,7 @@
 
 .square-view {
 
+	/* JAR works!! */
 	-fx-background-image: url("../images/grass_128px.png");
 	-fx-border-color: green;
 }

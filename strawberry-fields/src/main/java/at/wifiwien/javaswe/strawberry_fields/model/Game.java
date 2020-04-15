@@ -8,7 +8,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import at.wifiwien.javaswe.strawberry_fields.exception.MoveException;
-import at.wifiwien.javaswe.strawberry_fields.model.Square.Item;
+import at.wifiwien.javaswe.strawberry_fields.model.item.Item;
+import at.wifiwien.javaswe.strawberry_fields.model.item.Piece;
+import at.wifiwien.javaswe.strawberry_fields.model.item.Strawberry;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -52,7 +54,7 @@ public class Game {
 	public void init() {
 	
 		// create players and pieces
-		players = List.of(new Player("Jan", Item.PIECE_PLAYER1), new Player("Birgit", Item.PIECE_PLAYER2));
+		players = List.of(new Player("Jan", new Piece()), new Player("Birgit", new Piece()));
 		field = new Field(width, height);
 		field.init();
 		
@@ -89,7 +91,7 @@ public class Game {
 		
 		for (Position pos : strawberryPositions) {
 			
-			field.setItemAtPosition(pos, Item.STRAWBERRY);
+			field.setItemAtPosition(pos, new Strawberry());
 		}
 		
 		
@@ -126,7 +128,7 @@ public class Game {
 		currentPositions.set(playersTurn.get(), dest);
 		
 		// increment score when moving over strawberry
-		if (destItem == Item.STRAWBERRY) {
+		if (destItem instanceof Strawberry) {
 			
 			int currentScore = players.get(getPlayersTurn()).getScore();
 			players.get(getPlayersTurn()).setScore(currentScore+1);
