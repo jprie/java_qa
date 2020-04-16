@@ -65,10 +65,7 @@ public class StartScreenController extends CommonPropertiesController {
 		// start game in new window
 		try {
 			// override existing game instance
-
-			game = new Game();
-			game.init();
-
+			model.newGame();
 			loadFXMLInNewStage(Constants.PATH_TO_GAME_FXML);
 		} catch (IOException e) {
 			e.printStackTrace();

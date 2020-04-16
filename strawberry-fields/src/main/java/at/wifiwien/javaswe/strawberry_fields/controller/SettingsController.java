@@ -3,7 +3,9 @@ package at.wifiwien.javaswe.strawberry_fields.controller;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import at.wifiwien.javaswe.strawberry_fields.application.Constants;
 import at.wifiwien.javaswe.strawberry_fields.model.Game;
+import at.wifiwien.javaswe.strawberry_fields.model.Settings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -14,7 +16,7 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import javafx.util.converter.NumberStringConverter;
 
-public class SettingsController {
+public class SettingsController extends CommonPropertiesController {
 
 	@FXML
 	private ResourceBundle resources;
@@ -63,11 +65,23 @@ public class SettingsController {
 	@FXML
 	void handleSaveAction(ActionEvent event) {
 
-		Game.getSettings().setNamePlayer1(namePlayer1Label.getText());
-		Game.getSettings().setNamePlayer2(namePlayer2Label.getText());
-		Game.getSettings().setNumColumns(Integer.parseInt(numColumnsTextField.getText()));
-		Game.getSettings().setNumRows(Integer.parseInt(numRowsTextField.getText()));
-		Game.getSettings().setNumStrawberries(Integer.parseInt(numStrawberriesTextField.getText()));
+		String namePlayer1 = namePlayer1Label.getText();
+		String namePlayer2 = namePlayer2Label.getText();
+		
+		int numColumns = Integer.parseInt(numColumnsTextField.getText());
+		int numRows = Integer.parseInt(numRowsTextField.getText());
+		int numStrawberries = Integer.parseInt(numStrawberriesTextField.getText());
+		
+		
+		if (namePlayer1 != null && !namePlayer1.contentEquals("") &&
+				namePlayer2 != null && !namePlayer2.contentEquals("") &&
+				numColumns > 0 && numRows > 0 &&
+				numStrawberries >= model.getGame().getMinNumStrawberries() &&
+				numStrawberries <= model.getGame().getMaxNumStrawberries()) { 
+		Settings settings = new Settings(namePlayer1, namePlayer2, numColumns, numRows, numStrawberries);
+		model.updateSettings(settings);
+		}
+		
 		closeWindow(event);
 
 	}
@@ -101,14 +115,15 @@ public class SettingsController {
 	 */
 	private void initGUIElements() {
 
-		namePlayer1Label.setText(Game.getSettings().getNamePlayer1());
-		namePlayer2Label.setText(Game.getSettings().getNamePlayer2());
-		numColumnsTextField.setText(Integer.toString(Game.getSettings().getNumColumns()));
-		numRowsTextField.setText(Integer.toString(Game.getSettings().getNumRows()));
-		numStrawberriesTextField.setText(Integer.toString(Game.getSettings().getNumStrawberries()));
+		
+		namePlayer1Label.setText(model.getSettings().getNamePlayer1());
+		namePlayer2Label.setText(model.getSettings().getNamePlayer2());
+		numColumnsTextField.setText(Integer.toString(model.getSettings().getNumColumns()));
+		numRowsTextField.setText(Integer.toString(model.getSettings().getNumRows()));
+		numStrawberriesTextField.setText(Integer.toString(model.getSettings().getNumStrawberries()));
 
-		numStrawberriesSlider.setMax(Game.getMaxNumStrawberries());
-		numStrawberriesSlider.setMin(Game.getMinNumStrawberries());
+		numStrawberriesSlider.setMax(model.getGame().getMaxNumStrawberries());
+		numStrawberriesSlider.setMin(model.getGame().getMinNumStrawberries());
 
 	}
 }

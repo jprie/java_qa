@@ -50,7 +50,7 @@ public class GameController extends CommonPropertiesController {
 		if (move.isPresent()) {
 			try {
 
-				game.move(move.get());
+				model.getGame().move(move.get());
 
 			} catch (MoveAtFenceException e) {
 				

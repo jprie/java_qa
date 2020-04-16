@@ -71,9 +71,9 @@ public class FieldController extends CommonPropertiesController {
 		});
 
 		// bind model data
-		Bindings.bindContentBidirectional(squares, game.getField().getSquares());
+		Bindings.bindContentBidirectional(squares, model.getGame().getField().getSquares());
 
-		assert (squares.size() == game.getField().getHeight() * game.getField().getWidth());
+		assert (squares.size() == model.getGame().getField().getHeight() * model.getGame().getField().getWidth());
 
 		generateSquares();
 	}
@@ -88,8 +88,8 @@ public class FieldController extends CommonPropertiesController {
 		StackPane squareView;
 		List<StackPane> squareViews = new ArrayList<>();
 
-		int height = game.getField().getHeight();
-		int width = game.getField().getWidth();
+		int height = model.getGame().getField().getHeight();
+		int width = model.getGame().getField().getWidth();
 
 		for (int row = 0; row < height; row++) {
 			for (int col = 0; col < width; col++) {
@@ -161,7 +161,7 @@ public class FieldController extends CommonPropertiesController {
 		switch (item.getType()) {
 
 		case PIECE:
-			return game.getPlayers().get(0).getItem() == item ? Constants.PATH_TO_IMAGE_PLAYER1
+			return model.getGame().getPlayers().get(0).getItem() == item ? Constants.PATH_TO_IMAGE_PLAYER1
 					: Constants.PATH_TO_IMAGE_PLAYER2;
 		case STRAWBERRY:
 			return Constants.PATH_TO_IMAGE_STRAWBERRY;
@@ -202,7 +202,7 @@ public class FieldController extends CommonPropertiesController {
 	 */
 	public void animateTouchedFence(Position pos) {
 		
-		StackPane squareView = (StackPane)fieldView.getChildren().get(pos.y*game.getField().getWidth()+pos.x);
+		StackPane squareView = (StackPane)fieldView.getChildren().get(pos.y*model.getGame().getField().getWidth()+pos.x);
 		
 		int[] t = { -10 };
 

@@ -11,45 +11,44 @@ class TestModel {
 	@Test
 	void testFieldInitialization() {
 
-		Game game = new Game();
-		game.init();
+		GameModel model = new GameModelImpl();
+		model.newGame();
 
-		System.out.println(game.getField());
+		//System.out.println(model.getGame().getField());
 
-		assertEquals(game.getField().getItemAtPosition(new Position(0, 0)), game.getPlayers().get(0).getItem());
+		assertEquals(model.getGame().getField().getItemAtPosition(new Position(0, 0)), model.getGame().getPlayers().get(0).getItem());
 	}
 
 	@Test
 	void testMoving() {
 
-		Game game = new Game();
-
-		game.init();
-
+		GameModel model = new GameModelImpl();
+		model.newGame();
+		
 		try {
-			game.move(new Move(1, Move.Direction.RIGHT));
+			model.getGame().move(new Move(1, Move.Direction.RIGHT));
 		} catch (MoveException e) {
 			System.out.println("Move could not be done: " + e.getMessage());
 		}
 		
-		assertEquals(game.getField().getItemAtPosition(new Position(1, 0)), game.getPlayers().get(0).getItem());
+		assertEquals(model.getGame().getField().getItemAtPosition(new Position(1, 0)), model.getGame().getPlayers().get(0).getItem());
 	}
 	
 	@Test
 	void testTogglePlayersTurn() {
 
-		Game game = new Game();
-		game.init();
+		GameModel model = new GameModelImpl();
+		model.newGame();
 		
-		assertEquals(game.getPlayersTurn(), Game.INDEX_PLAYER1);
+		assertEquals(model.getGame().getPlayersTurn(), Game.INDEX_PLAYER1);
 		
 		try {
-			game.move(new Move(1, Move.Direction.RIGHT));
+			model.getGame().move(new Move(1, Move.Direction.RIGHT));
 		} catch (MoveException e) {
 			System.out.println("Move could not be done: " + e.getMessage());
 		}
 		
-		assertEquals(game.getPlayersTurn(), Game.INDEX_PLAYER2);
+		assertEquals(model.getGame().getPlayersTurn(), Game.INDEX_PLAYER2);
 
 		
 	}

@@ -51,7 +51,7 @@ public class GameInfoController extends CommonPropertiesController {
 
         initUIElements();
         
-        game.winnerProperty().addListener(this::handleWinnerChanged);
+        model.getGame().winnerProperty().addListener(this::handleWinnerChanged);
     }
     
     void handleWinnerChanged(ObservableValue<? extends Optional<Player>> winner, Optional<Player> oldPlayer, Optional<Player> newPlayer) {
@@ -76,6 +76,8 @@ public class GameInfoController extends CommonPropertiesController {
 
 	private void initUIElements() {
 	
+		Game game = model.getGame();
+		
 		// set player names
 		namePlayer1Label.textProperty().bind(game.getPlayers().get(Game.INDEX_PLAYER1).nameProperty().concat(":"));
 		namePlayer2Label.textProperty().bind(game.getPlayers().get(Game.INDEX_PLAYER2).nameProperty().concat(":"));
