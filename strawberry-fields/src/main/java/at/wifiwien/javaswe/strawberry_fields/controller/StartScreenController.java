@@ -55,7 +55,7 @@ public class StartScreenController extends CommonPropertiesController {
 
 		// start game in new window
 		try {
-			loadFXMLInNewStage(Constants.PATH_TO_SETTINGS_FXML);
+			loadFXMLInNewStage(Constants.PATH_TO_SETTINGS_FXML, null);
 		} catch (IOException e) {
 
 			System.err.println("FATAL ERROR: Could not load: " + Constants.PATH_TO_SETTINGS_FXML);
@@ -68,15 +68,23 @@ public class StartScreenController extends CommonPropertiesController {
 		// start game in new window
 		try {
 			// override existing game instance
-			model.newGame();
-			loadFXMLInNewStage(Constants.PATH_TO_GAME_FXML);
+			
+			loadFXMLInNewStage(Constants.PATH_TO_GAME_FXML, () -> model.newGame());
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.err.println("FATAL ERROR: Could not load: " + Constants.PATH_TO_GAME_FXML);
 		}
 	}
 
-	private void loadFXMLInNewStage(String pathToGameFxml) throws IOException {
+	/**
+	 * Load the given fxml path in a new stage and run the given action after Controllers were initialized
+	 * This helps with registering a listener for the game property in the initializer actually being ready
+	 * whem the game changes for the first time
+	 * @param pathToGameFxml
+	 * @param action
+	 * @throws IOException
+	 */
+	private void loadFXMLInNewStage(String pathToGameFxml, Runnable action) throws IOException {
 
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource(pathToGameFxml));
@@ -86,6 +94,9 @@ public class StartScreenController extends CommonPropertiesController {
 
 		Stage newStage = new Stage();
 		newStage.setScene(newScene);
+		
+		action.run();
+		
 		newStage.showAndWait();
 
 	}
@@ -94,8 +105,7 @@ public class StartScreenController extends CommonPropertiesController {
 	public void handleLoadGameAction(ActionEvent event) {
 
 		try {
-			model.loadGame();
-			loadFXMLInNewStage(Constants.PATH_TO_GAME_FXML);
+			loadFXMLInNewStage(Constants.PATH_TO_GAME_FXML, () -> model.loadGame());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -1,5 +1,6 @@
 package at.wifiwien.javaswe.strawberry_fields.model;
 
+import javafx.beans.property.ObjectProperty;
 
 /**
  * Defines the interface to the model
@@ -17,6 +18,8 @@ public interface GameModel {
 	void updateSettings(Settings settings);
 	
 	Settings getSettings();
+
+	ObjectProperty<Game> gameProperty();
 	
 	Game getGame();
 }

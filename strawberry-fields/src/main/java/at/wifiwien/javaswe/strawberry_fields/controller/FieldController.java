@@ -34,8 +34,6 @@ import javafx.util.Duration;
 
 public class FieldController extends CommonPropertiesController {
 
-	public static int WIDTH = 15;
-	public static int HEIGHT = 10;
 
 	@FXML
 	private ResourceBundle resources;
@@ -51,7 +49,6 @@ public class FieldController extends CommonPropertiesController {
 	@FXML
 	void initialize() {
 		assert fieldView != null : "fx:id=\"fieldView\" was not injected: check your FXML file 'Field.fxml'.";
-		fieldView.setPrefColumns(WIDTH);
 
 		// add callback to squares
 		squares = FXCollections.observableArrayList((square) -> new Observable[] { square.itemProperty() });
@@ -70,12 +67,17 @@ public class FieldController extends CommonPropertiesController {
 			}
 		});
 
-		// bind model data
-		Bindings.bindContentBidirectional(squares, model.getGame().getField().getSquares());
+		// listener for game changes
+		model.gameProperty().addListener((obs, og, ng) -> {
 
-		assert (squares.size() == model.getGame().getField().getHeight() * model.getGame().getField().getWidth());
+			// bind model data
+			Bindings.bindContentBidirectional(squares, model.getGame().getField().getSquares());
 
-		generateSquares();
+			assert (squares.size() == model.getGame().getField().getHeight() * model.getGame().getField().getWidth());
+
+			generateSquares();
+
+		});
 	}
 
 	/**
@@ -110,9 +112,9 @@ public class FieldController extends CommonPropertiesController {
 			}
 		}
 
+		
 		fieldView.getChildren().addAll(squareViews);
 		fieldView.setPrefColumns(width);
-		
 
 	}
 
@@ -178,9 +180,8 @@ public class FieldController extends CommonPropertiesController {
 
 		int[] t = { -10 };
 
-		KeyFrame[] keyFrames = Stream.iterate(0, (i) -> i + 1)
-				.limit(10)
-				.map(i -> new Border(new BorderStroke(Color.ORANGERED, BorderStrokeStyle.SOLID, null, new BorderWidths(i))))
+		KeyFrame[] keyFrames = Stream.iterate(0, (i) -> i + 1).limit(10).map(
+				i -> new Border(new BorderStroke(Color.ORANGERED, BorderStrokeStyle.SOLID, null, new BorderWidths(i))))
 				.map(b -> new KeyFrame(Duration.millis(t[0] += 10), new KeyValue(fieldView.borderProperty(), b)))
 				.collect(Collectors.toList()).toArray(new KeyFrame[5]);
 
@@ -198,17 +199,18 @@ public class FieldController extends CommonPropertiesController {
 
 	/**
 	 * Animate the item the piece tried to move over
+	 * 
 	 * @param fence
 	 */
 	public void animateTouchedFence(Position pos) {
-		
-		StackPane squareView = (StackPane)fieldView.getChildren().get(pos.y*model.getGame().getField().getWidth()+pos.x);
-		
+
+		StackPane squareView = (StackPane) fieldView.getChildren()
+				.get(pos.y * model.getGame().getField().getWidth() + pos.x);
+
 		int[] t = { -10 };
 
-		KeyFrame[] keyFrames = Stream.iterate(0, (i) -> i + 1)
-				.limit(10)
-				.map(i -> new Border(new BorderStroke(Color.ORANGERED, BorderStrokeStyle.SOLID, null, new BorderWidths(i))))
+		KeyFrame[] keyFrames = Stream.iterate(0, (i) -> i + 1).limit(10).map(
+				i -> new Border(new BorderStroke(Color.ORANGERED, BorderStrokeStyle.SOLID, null, new BorderWidths(i))))
 				.map(b -> new KeyFrame(Duration.millis(t[0] += 10), new KeyValue(squareView.borderProperty(), b)))
 				.collect(Collectors.toList()).toArray(new KeyFrame[5]);
 
@@ -219,8 +221,7 @@ public class FieldController extends CommonPropertiesController {
 		timeline.setAutoReverse(true);
 		timeline.setCycleCount(2);
 		timeline.play();
-		
-		
+
 	}
 
 }

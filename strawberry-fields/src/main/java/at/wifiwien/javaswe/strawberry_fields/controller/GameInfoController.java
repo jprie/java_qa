@@ -49,9 +49,15 @@ public class GameInfoController extends CommonPropertiesController {
         assert strawberriesLeftLabel != null : "fx:id=\"strawberriesLeftLabel\" was not injected: check your FXML file 'GameInfo.fxml'.";
         assert numberStrawberriesLeftLabel != null : "fx:id=\"numberStrawberriesLeftLabel\" was not injected: check your FXML file 'GameInfo.fxml'.";
 
-        initUIElements();
+        // listener for game changes
+        model.gameProperty().addListener((obs, og, ng) -> {
+        	
+        	model.getGame().winnerProperty().addListener(this::handleWinnerChanged);
+        	initUIElements();
+        });
         
-        model.getGame().winnerProperty().addListener(this::handleWinnerChanged);
+        
+
     }
     
     void handleWinnerChanged(ObservableValue<? extends Optional<Player>> winner, Optional<Player> oldPlayer, Optional<Player> newPlayer) {
