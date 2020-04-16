@@ -6,10 +6,10 @@ import java.util.ResourceBundle;
 
 import at.wifiwien.javaswe.strawberry_fields.application.Constants;
 import at.wifiwien.javaswe.strawberry_fields.model.Game;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -43,7 +43,8 @@ public class StartScreenController extends CommonPropertiesController {
 	@FXML
 	void handleExitGameAction(ActionEvent event) {
 
-		Platform.exit();
+		Stage stage = (Stage)((Node)event.getTarget()).getScene().getWindow();
+		stage.close();
 	}
 
 	@FXML
