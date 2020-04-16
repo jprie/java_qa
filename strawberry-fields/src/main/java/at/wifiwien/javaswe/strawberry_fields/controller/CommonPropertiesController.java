@@ -6,9 +6,4 @@ public class CommonPropertiesController {
 
 	
 	public static Game game;
-	
-	static {
-		game = new Game();
-		game.init();
-	}
 }

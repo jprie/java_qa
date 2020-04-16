@@ -22,9 +22,11 @@ public class Game {
 	public static final int INDEX_PLAYER1 = 0;
 	public static final int INDEX_PLAYER2 = 1;
 	
+	private static Settings settings = new Settings("Peter", "Birgit", 15, 9, 20);
+	
 	// configuration
-	private final int width;
-	private final int height;
+	private final int numColumns;
+	private final int numRows;
 	private int numStrawberries;
 	private List<Position> initPositions;
 	
@@ -39,15 +41,27 @@ public class Game {
 	
 	
 	
-	
+	/**
+	 * Change settings for new game (not yet created, thus static)
+	 * @return
+	 */
+	public static Settings getSettings() {
+		return settings;
+	}
+
+	public static void setSettings(Settings settings) {
+		Game.settings = settings;
+	}
+
 	/**
 	 * Create a new game and set a default configuration
 	 */
 	public Game() {
 	
-		this.width = 15;
-		this.height = 9;
-		this.numStrawberries = 2;
+		System.out.println("Create new game with settings: " + settings);
+		this.numColumns = settings.getNumColumns();
+		this.numRows = settings.getNumRows();
+		this.numStrawberries = settings.getNumStrawberries();
 	}
 	
 	/**
@@ -56,8 +70,8 @@ public class Game {
 	public void init() {
 	
 		// create players and pieces
-		players = List.of(new Player("Jan", new Piece()), new Player("Birgit", new Piece()));
-		field = new Field(width, height);
+		players = List.of(new Player(settings.getNamePlayer1(), new Piece()), new Player(settings.getNamePlayer2(), new Piece()));
+		field = new Field(numColumns, numRows);
 		field.init();
 		
 		setStrawberriesLeft(numStrawberries);
@@ -71,14 +85,14 @@ public class Game {
 	private void layoutField() {
 		
 		// create positions
-		List<Position> piecePositions = List.of(new Position(0, 0), new Position(width-1, height-1));
+		List<Position> piecePositions = List.of(new Position(0, 0), new Position(numColumns-1, numRows-1));
 		currentPositions = new ArrayList<>(piecePositions);
 		initPositions = new ArrayList<>(piecePositions);
 		
 		// create fence positions
 		
-		fencePositions = List.of(new Position(width/2-2,  height/2), new Position(width/2-1,  height/2), new Position(width/2, height/2),
-									new Position(width/2+1, height/2), new Position(width/2+2,  height/2));
+		fencePositions = List.of(new Position(numColumns/2-2,  numRows/2), new Position(numColumns/2-1,  numRows/2), new Position(numColumns/2, numRows/2),
+									new Position(numColumns/2+1, numRows/2), new Position(numColumns/2+2,  numRows/2));
 		
 		for (Position p : fencePositions) {
 			field.setItemAtPosition(p, new Fence());
@@ -89,7 +103,7 @@ public class Game {
 		Random random = new Random();
 		
 		// generate random positions and filter for piece and fence positions
-		List<Position> strawberryPositions = Stream.generate(() -> new Position(random.nextInt(width), random.nextInt(height)))
+		List<Position> strawberryPositions = Stream.generate(() -> new Position(random.nextInt(numColumns), random.nextInt(numRows)))
 												.filter(pos -> !pos.equals(piecePositions.get(INDEX_PLAYER1)) &&
 																!pos.equals(piecePositions.get(INDEX_PLAYER2)))
 												.filter(pos -> !fencePositions.contains(pos))

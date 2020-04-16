@@ -15,7 +15,7 @@ public class Main extends Application {
 		try {
 			
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource(Constants.PATH_TO_GAME_FXML));
+			loader.setLocation(getClass().getResource(Constants.PATH_TO_START_SCREEN_FXML));
 			Parent root = loader.load();
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource(Constants.PATH_TO_APPLICATION_CSS).toExternalForm());
