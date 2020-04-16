@@ -13,5 +13,6 @@ public class Constants {
 	public static final String PATH_TO_IMAGE_PLAYER1 = "/at/wifiwien/javaswe/strawberry_fields/images/player_male_128px.png";
 	public static final String PATH_TO_IMAGE_PLAYER2 = "/at/wifiwien/javaswe/strawberry_fields/images/player_female_128px.png";
 	public static final String PATH_TO_IMAGE_STRAWBERRY = "/at/wifiwien/javaswe/strawberry_fields/images/strawberry-transparent_128px.png";
+	public static final String PATH_TO_IMAGE_FENCE = "/at/wifiwien/javaswe/strawberry_fields/images/fence_128px.png";
 	
 }

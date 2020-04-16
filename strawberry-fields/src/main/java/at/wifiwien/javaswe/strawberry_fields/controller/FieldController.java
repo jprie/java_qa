@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import at.wifiwien.javaswe.strawberry_fields.application.Constants;
+import at.wifiwien.javaswe.strawberry_fields.model.Fence;
+import at.wifiwien.javaswe.strawberry_fields.model.Position;
 import at.wifiwien.javaswe.strawberry_fields.model.Square;
 import at.wifiwien.javaswe.strawberry_fields.model.item.Item;
 import javafx.animation.KeyFrame;
@@ -162,7 +164,7 @@ public class FieldController extends CommonPropertiesController {
 		case STRAWBERRY:
 			return Constants.PATH_TO_IMAGE_STRAWBERRY;
 		case FENCE:
-
+			return Constants.PATH_TO_IMAGE_FENCE;
 		}
 
 		return null;
@@ -174,8 +176,9 @@ public class FieldController extends CommonPropertiesController {
 
 		int[] t = { -10 };
 
-		KeyFrame[] keyFrames = Stream.iterate(0, (i) -> i + 1).limit(10).map(
-				i -> new Border(new BorderStroke(Color.ORANGERED, BorderStrokeStyle.SOLID, null, new BorderWidths(i))))
+		KeyFrame[] keyFrames = Stream.iterate(0, (i) -> i + 1)
+				.limit(10)
+				.map(i -> new Border(new BorderStroke(Color.ORANGERED, BorderStrokeStyle.SOLID, null, new BorderWidths(i))))
 				.map(b -> new KeyFrame(Duration.millis(t[0] += 10), new KeyValue(fieldView.borderProperty(), b)))
 				.collect(Collectors.toList()).toArray(new KeyFrame[5]);
 
@@ -189,6 +192,33 @@ public class FieldController extends CommonPropertiesController {
 
 		fieldView.setManaged(true);
 
+	}
+
+	/**
+	 * Animate the item the piece tried to move over
+	 * @param fence
+	 */
+	public void animateTouchedFence(Position pos) {
+		
+		StackPane squareView = (StackPane)fieldView.getChildren().get(pos.y*game.getField().getWidth()+pos.x);
+		
+		int[] t = { -10 };
+
+		KeyFrame[] keyFrames = Stream.iterate(0, (i) -> i + 1)
+				.limit(10)
+				.map(i -> new Border(new BorderStroke(Color.ORANGERED, BorderStrokeStyle.SOLID, null, new BorderWidths(i))))
+				.map(b -> new KeyFrame(Duration.millis(t[0] += 10), new KeyValue(squareView.borderProperty(), b)))
+				.collect(Collectors.toList()).toArray(new KeyFrame[5]);
+
+		// reset counter
+
+		Timeline timeline = new Timeline(keyFrames);
+
+		timeline.setAutoReverse(true);
+		timeline.setCycleCount(2);
+		timeline.play();
+		
+		
 	}
 
 }

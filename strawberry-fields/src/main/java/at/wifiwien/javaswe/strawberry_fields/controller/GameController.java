@@ -52,12 +52,18 @@ public class GameController extends CommonPropertiesController {
 
 				game.move(move.get());
 
+			} catch (MoveAtFenceException e) {
+				
+				System.out.println("MoveAtFenceException: " + e.getMessage());
+				
+				fieldController.animateTouchedFence(e.getPosition());
+				
 			} catch (MoveException e) {
 				System.out.println("MoveException: " + e.getMessage());
 				
 				fieldController.animateRedBorder();
 
-			}
+			} 
 
 		}
 	}

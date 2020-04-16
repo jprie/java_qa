@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import at.wifiwien.javaswe.strawberry_fields.controller.MoveAtFenceException;
 import at.wifiwien.javaswe.strawberry_fields.exception.MoveException;
 import at.wifiwien.javaswe.strawberry_fields.model.item.Item;
 import at.wifiwien.javaswe.strawberry_fields.model.item.Piece;
@@ -31,6 +32,7 @@ public class Game {
 	private Field field;
 	private List<Player> players;
 	private List<Position> currentPositions;
+	private List<Position> fencePositions;
 	private IntegerProperty strawberriesLeft = new SimpleIntegerProperty();
 	private IntegerProperty playersTurn = new SimpleIntegerProperty();
 	private ObjectProperty<Optional<Player>> winner = new SimpleObjectProperty<>();
@@ -44,7 +46,7 @@ public class Game {
 	public Game() {
 	
 		this.width = 15;
-		this.height = 10;
+		this.height = 9;
 		this.numStrawberries = 2;
 	}
 	
@@ -73,11 +75,24 @@ public class Game {
 		currentPositions = new ArrayList<>(piecePositions);
 		initPositions = new ArrayList<>(piecePositions);
 		
+		// create fence positions
+		
+		fencePositions = List.of(new Position(width/2-2,  height/2), new Position(width/2-1,  height/2), new Position(width/2, height/2),
+									new Position(width/2+1, height/2), new Position(width/2+2,  height/2));
+		
+		for (Position p : fencePositions) {
+			field.setItemAtPosition(p, new Fence());
+		}
+		
+		
 		
 		Random random = new Random();
+		
+		// generate random positions and filter for piece and fence positions
 		List<Position> strawberryPositions = Stream.generate(() -> new Position(random.nextInt(width), random.nextInt(height)))
 												.filter(pos -> !pos.equals(piecePositions.get(INDEX_PLAYER1)) &&
 																!pos.equals(piecePositions.get(INDEX_PLAYER2)))
+												.filter(pos -> !fencePositions.contains(pos))
 												.distinct()
 												.limit(numStrawberries)
 												.collect(Collectors.toList());
@@ -121,9 +136,15 @@ public class Game {
 			throw new MoveException("Item at src position is not a piece of player" + (getPlayersTurn()+1));
 		}
 		
-		Item item = field.removeItemFromPosition(src);
+		// check if dest item of type fence
 		Item destItem = field.getItemAtPosition(dest);
+		if (destItem instanceof Fence) {
+			
+			throw new MoveAtFenceException("Cannot surpass fence at destination", dest);
+		}
 		
+		// execute move
+		Item item = field.removeItemFromPosition(src);
 		field.setItemAtPosition(dest, item);
 		currentPositions.set(playersTurn.get(), dest);
 		
