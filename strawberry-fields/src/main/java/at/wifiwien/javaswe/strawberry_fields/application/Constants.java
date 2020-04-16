@@ -17,6 +17,10 @@ public class Constants {
 	public static final String PATH_TO_IMAGE_STRAWBERRY = "/at/wifiwien/javaswe/strawberry_fields/images/strawberry-transparent_128px.png";
 	public static final String PATH_TO_IMAGE_FENCE = "/at/wifiwien/javaswe/strawberry_fields/images/fence_128px.png";
 	
+	// required bounds for settings
+	public static final double MIN_NUM_STRAWBERRIES = 5;
+	public static final double MAX_NUM_STRAWBERRIES_DIVIDER = 4;
+	
 	
 	
 }

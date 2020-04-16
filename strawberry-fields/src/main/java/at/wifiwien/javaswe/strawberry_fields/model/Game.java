@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import at.wifiwien.javaswe.strawberry_fields.application.Constants;
 import at.wifiwien.javaswe.strawberry_fields.controller.MoveAtFenceException;
 import at.wifiwien.javaswe.strawberry_fields.exception.MoveException;
 import at.wifiwien.javaswe.strawberry_fields.model.item.Item;
@@ -52,6 +53,21 @@ public class Game {
 	public static void setSettings(Settings settings) {
 		Game.settings = settings;
 	}
+	
+	/**
+	 * Helper to determine the bounds for number of strawberries 
+	 * @return
+	 */
+	public static double getMaxNumStrawberries() {
+
+		return settings.getNumColumns()*settings.getNumRows()/Constants.MAX_NUM_STRAWBERRIES_DIVIDER;
+	}
+	
+	public static double getMinNumStrawberries() {
+
+		return Constants.MIN_NUM_STRAWBERRIES;
+	}
+
 
 	/**
 	 * Create a new game and set a default configuration
