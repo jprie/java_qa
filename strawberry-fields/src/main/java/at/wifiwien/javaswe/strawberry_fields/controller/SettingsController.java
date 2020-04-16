@@ -76,8 +76,8 @@ public class SettingsController extends CommonPropertiesController {
 		if (namePlayer1 != null && !namePlayer1.contentEquals("") &&
 				namePlayer2 != null && !namePlayer2.contentEquals("") &&
 				numColumns > 0 && numRows > 0 &&
-				numStrawberries >= model.getGame().getMinNumStrawberries() &&
-				numStrawberries <= model.getGame().getMaxNumStrawberries()) { 
+				numStrawberries >= model.getSettings().getMinNumStrawberries() &&
+				numStrawberries <= model.getSettings().getMaxNumStrawberries()) { 
 		Settings settings = new Settings(namePlayer1, namePlayer2, numColumns, numRows, numStrawberries);
 		model.updateSettings(settings);
 		}
@@ -122,8 +122,8 @@ public class SettingsController extends CommonPropertiesController {
 		numRowsTextField.setText(Integer.toString(model.getSettings().getNumRows()));
 		numStrawberriesTextField.setText(Integer.toString(model.getSettings().getNumStrawberries()));
 
-		numStrawberriesSlider.setMax(model.getGame().getMaxNumStrawberries());
-		numStrawberriesSlider.setMin(model.getGame().getMinNumStrawberries());
+		numStrawberriesSlider.setMax(model.getSettings().getMaxNumStrawberries());
+		numStrawberriesSlider.setMin(model.getSettings().getMinNumStrawberries());
 
 	}
 }

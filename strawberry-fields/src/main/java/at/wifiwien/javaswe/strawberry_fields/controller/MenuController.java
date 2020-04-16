@@ -1,7 +1,11 @@
 package at.wifiwien.javaswe.strawberry_fields.controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import at.wifiwien.javaswe.strawberry_fields.application.Constants;
+import at.wifiwien.javaswe.strawberry_fields.application.Utils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -101,6 +105,12 @@ public class MenuController extends CommonPropertiesController {
 	@FXML
 	public void handleSettings(ActionEvent event) {
 		
+		try {
+			Utils.loadFXMLInNewStage(Constants.PATH_TO_SETTINGS_FXML);
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
 		
 	}
 }

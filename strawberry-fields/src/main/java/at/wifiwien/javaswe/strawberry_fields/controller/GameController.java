@@ -32,9 +32,10 @@ public class GameController extends CommonPropertiesController {
         assert fieldController != null : "fx:id=\"field\" was not injected: check your FXML file 'Game.fxml'.";
 
         view.setOnKeyPressed(this::handleKeyPressedOnField);
-        
-        
+
         view.sceneProperty().addListener(this::handleSceneInvalidated);
+        
+        
     }
     
 	/**

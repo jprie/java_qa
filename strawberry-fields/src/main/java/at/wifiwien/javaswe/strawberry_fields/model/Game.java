@@ -87,22 +87,6 @@ public class Game implements Serializable {
 
 	}
 	
-
-	/**
-	 * Helper to determine the bounds for number of strawberries 
-	 * @return
-	 */
-	public double getMaxNumStrawberries() {
-
-		return settings.getNumColumns()*settings.getNumRows()/Constants.MAX_NUM_STRAWBERRIES_DIVIDER;
-	}
-	
-	public double getMinNumStrawberries() {
-
-		return Constants.MIN_NUM_STRAWBERRIES;
-	}
-
-
 	/**
 	 * Create a new game and set a default configuration
 	 */

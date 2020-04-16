@@ -1,5 +1,6 @@
 package at.wifiwien.javaswe.strawberry_fields.model;
 
+import at.wifiwien.javaswe.strawberry_fields.application.Constants;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -92,4 +93,21 @@ public class Settings {
 		
 		return getNamePlayer1() + ", " + getNamePlayer2() + ", " + getNumColumns() + "x" + getNumRows() + ", " + getNumStrawberries(); 
 	}
+
+
+	/**
+	 * Helper to determine the bounds for number of strawberries 
+	 * @return
+	 */
+	public double getMaxNumStrawberries() {
+
+		return getNumColumns()*getNumRows()/Constants.MAX_NUM_STRAWBERRIES_DIVIDER;
+	}
+	
+	public double getMinNumStrawberries() {
+
+		return Constants.MIN_NUM_STRAWBERRIES;
+	}
+
+
 }
