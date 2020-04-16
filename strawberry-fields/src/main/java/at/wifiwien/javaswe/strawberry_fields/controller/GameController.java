@@ -31,6 +31,16 @@ public class GameController extends CommonPropertiesController {
         assert view != null : "fx:id=\"view\" was not injected: check your FXML file 'Game.fxml'.";
         assert fieldController != null : "fx:id=\"field\" was not injected: check your FXML file 'Game.fxml'.";
 
+        
+		// resize stage when field was dynamically initialized
+		fieldLayoutDone.addListener((obs, ov, nv) -> {
+			if (nv == true) {
+				System.out.println("Resize window");
+				view.getScene().getWindow().sizeToScene();
+
+			}
+		});
+		
         view.setOnKeyPressed(this::handleKeyPressedOnField);
 
         view.sceneProperty().addListener(this::handleSceneInvalidated);

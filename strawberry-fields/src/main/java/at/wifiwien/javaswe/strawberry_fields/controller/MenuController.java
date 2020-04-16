@@ -86,12 +86,15 @@ public class MenuController extends CommonPropertiesController {
     @FXML
     void handleNewGame(ActionEvent event) {
 
+    	fieldLayoutDone.set(false);
+    	
     	model.newGame();
     }
 
     @FXML
     void loadGame(ActionEvent event) {
 
+    	fieldLayoutDone.set(false);
     	model.loadGame();
     }
 
