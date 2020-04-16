@@ -111,6 +111,8 @@ public class FieldController extends CommonPropertiesController {
 		}
 
 		fieldView.getChildren().addAll(squareViews);
+		fieldView.setPrefColumns(width);
+		
 
 	}
 
