@@ -1,9 +1,18 @@
 package at.wifiwien.javaswe.strawberry_fields.model.item;
 
-public class Item {
+import java.io.Serializable;
+
+public class Item implements Serializable {
 	
 	// type used as constant var for switch case
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+
+
 	public enum Type {
 		PIECE, STRAWBERRY, FENCE
 	}

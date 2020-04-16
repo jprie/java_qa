@@ -1,7 +1,10 @@
 package at.wifiwien.javaswe.strawberry_fields.model;
 
+
+import at.wifiwien.javaswe.strawberry_fields.service.GameFileIOService;
+
 /**
- * GameModel represents the model holding all the parts together
+ * GameModel implememnts the interface the controllers are talking to
  * @author jprie
  *
  */
@@ -10,6 +13,8 @@ public class GameModelImpl implements GameModel {
 	private Game game;
 	private Settings settings = new Settings("Peter", "Birgit", 15, 9, 20);
 	
+	
+	private GameFileIOService fileService = new GameFileIOService();
 	
 
 	@Override
@@ -21,14 +26,15 @@ public class GameModelImpl implements GameModel {
 	}
 
 	@Override
-	public Game loadGame() {
+	public void loadGame() {
 		// TODO Auto-generated method stub
-		return null;
+		game = fileService.load().orElseThrow();
 	}
 
 	@Override
-	public void saveGame(Game game) {
-		// TODO Auto-generated method stub
+	public void saveGame() {
+		
+		fileService.save(game);
 		
 	}
 

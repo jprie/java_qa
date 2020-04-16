@@ -16,7 +16,7 @@ class TestModel {
 
 		//System.out.println(model.getGame().getField());
 
-		assertEquals(model.getGame().getField().getItemAtPosition(new Position(0, 0)), model.getGame().getPlayers().get(0).getItem());
+		assertEquals(model.getGame().getField().getItemAtPosition(new Position(0, 0)), model.getGame().getPlayers().get(0).getPiece());
 	}
 
 	@Test
@@ -31,7 +31,7 @@ class TestModel {
 			System.out.println("Move could not be done: " + e.getMessage());
 		}
 		
-		assertEquals(model.getGame().getField().getItemAtPosition(new Position(1, 0)), model.getGame().getPlayers().get(0).getItem());
+		assertEquals(model.getGame().getField().getItemAtPosition(new Position(1, 0)), model.getGame().getPlayers().get(0).getPiece());
 	}
 	
 	@Test

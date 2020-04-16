@@ -161,7 +161,7 @@ public class FieldController extends CommonPropertiesController {
 		switch (item.getType()) {
 
 		case PIECE:
-			return model.getGame().getPlayers().get(0).getItem() == item ? Constants.PATH_TO_IMAGE_PLAYER1
+			return model.getGame().getPlayers().get(0).getPiece() == item ? Constants.PATH_TO_IMAGE_PLAYER1
 					: Constants.PATH_TO_IMAGE_PLAYER2;
 		case STRAWBERRY:
 			return Constants.PATH_TO_IMAGE_STRAWBERRY;

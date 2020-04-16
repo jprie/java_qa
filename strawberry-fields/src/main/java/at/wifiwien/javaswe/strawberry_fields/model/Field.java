@@ -1,16 +1,63 @@
 package at.wifiwien.javaswe.strawberry_fields.model;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import at.wifiwien.javaswe.strawberry_fields.model.item.Item;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class Field {
+public class Field implements Serializable {
 
 	private final int width;
 	private final int height;
 
-	ObservableList<Square> squares = FXCollections.observableArrayList();
+	transient ObservableList<Square> squares = FXCollections.observableArrayList();
 
+	/**
+	 * reading object from ObjectOutputStream
+	 * @param oos
+	 */
+	@SuppressWarnings("unchecked")
+	private void readObject(ObjectInputStream ois) {
+
+		try {
+			ois.defaultReadObject();
+			squares = FXCollections.observableArrayList((List<Square>)ois.readObject());
+			
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * writing object to ObjectOutputStream
+	 * @param oos
+	 */
+	private void writeObject(ObjectOutputStream oos) {
+		try {
+			oos.defaultWriteObject();
+			oos.writeObject(new ArrayList<Square>(squares));
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
 	public Field(int width, int height) {
 		this.width = width;
 		this.height = height;

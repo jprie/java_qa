@@ -1,29 +1,72 @@
 package at.wifiwien.javaswe.strawberry_fields.model;
 
-import at.wifiwien.javaswe.strawberry_fields.model.item.Item;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
+import at.wifiwien.javaswe.strawberry_fields.model.item.Piece;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Player {
+public class Player implements Serializable {
 
-	private StringProperty name = new SimpleStringProperty();
-	private IntegerProperty score = new SimpleIntegerProperty();
-	private Item item;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	transient private StringProperty name = new SimpleStringProperty();
+	transient private IntegerProperty score = new SimpleIntegerProperty();
+	private Piece piece;
 
-	public Player(String name, Item item) {
-		super();
-		this.name.set(name);
-		this.item = item;
+	/**
+	 * reading Game from ObjectInputStream
+	 * @param ois
+	 */
+	private void readObject(ObjectInputStream ois) {
+
+		try {
+			ois.defaultReadObject();
+			name = new SimpleStringProperty((String)ois.readObject());
+			score = new SimpleIntegerProperty(ois.readInt());
+			
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * writing object to ObjectOutputStream
+	 * @param oos
+	 */
+	private void writeObject(ObjectOutputStream oos) {
+		try {
+			oos.defaultWriteObject();
+			oos.writeObject(name.get());
+			oos.writeInt(score.get());
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 	
-	public Item getItem() {
-		return item;
+	
+	public Player(String name, Piece piece) {
+		super();
+		this.name.set(name);
+		this.piece = piece;
+	}
+	
+	public Piece getPiece() {
+		return piece;
 	}
 
-	public void setItem(Item item) {
-		this.item = item;
+	public void setPiece(Piece piece) {
+		this.piece = piece;
 	}
 
 	public final StringProperty nameProperty() {

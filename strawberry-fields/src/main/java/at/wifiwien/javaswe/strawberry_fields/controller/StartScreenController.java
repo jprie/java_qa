@@ -33,6 +33,9 @@ public class StartScreenController extends CommonPropertiesController {
 	private Button exitGameButton;
 
 	@FXML
+	private Button loadButton;
+
+	@FXML
 	void initialize() {
 		assert startNewGameButton != null : "fx:id=\"startNewGameButton\" was not injected: check your FXML file 'StartScreen.fxml'.";
 		assert openSettingsButton != null : "fx:id=\"openSettingsButton\" was not injected: check your FXML file 'StartScreen.fxml'.";
@@ -43,7 +46,7 @@ public class StartScreenController extends CommonPropertiesController {
 	@FXML
 	void handleExitGameAction(ActionEvent event) {
 
-		Stage stage = (Stage)((Node)event.getTarget()).getScene().getWindow();
+		Stage stage = (Stage) ((Node) event.getTarget()).getScene().getWindow();
 		stage.close();
 	}
 
@@ -85,6 +88,17 @@ public class StartScreenController extends CommonPropertiesController {
 		newStage.setScene(newScene);
 		newStage.showAndWait();
 
+	}
+
+	@FXML
+	public void handleLoadGameAction(ActionEvent event) {
+
+		try {
+			model.loadGame();
+			loadFXMLInNewStage(Constants.PATH_TO_GAME_FXML);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

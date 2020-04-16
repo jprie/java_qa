@@ -1,7 +1,13 @@
 package at.wifiwien.javaswe.strawberry_fields.model;
 
-public class Position {
+import java.io.Serializable;
 
+public class Position implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public final int x;
 	public final int y;
 

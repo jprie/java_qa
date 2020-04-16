@@ -29,6 +29,7 @@
                </textFill>
             </Label>
             <Button fx:id="startNewGameButton" mnemonicParsing="false" onAction="#handleStartNewGameAction" text="New Game" />
+            <Button fx:id="loadButton" mnemonicParsing="false" onAction="#handleLoadGameAction" text="Load Game" />
             <Button fx:id="openSettingsButton" mnemonicParsing="false" onAction="#handleOpenSettingsAction" text="Settings" />
             <Button fx:id="exitGameButton" mnemonicParsing="false" onAction="#handleExitGameAction" text="Exit" />
          </children>

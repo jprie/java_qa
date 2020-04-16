@@ -1,5 +1,9 @@
 package at.wifiwien.javaswe.strawberry_fields.model;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,29 +22,70 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
-public class Game {
+public class Game implements Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	
 	public static final int INDEX_PLAYER1 = 0;
 	public static final int INDEX_PLAYER2 = 1;
-	
-	private Settings settings;
-	
 
 	// configuration
+	transient private Settings settings;
+	
 	private final int numColumns;
 	private final int numRows;
 	private int numStrawberries;
-	private List<Position> initPositions;
+	
 	
 	// game state
 	private Field field;
-	private List<Player> players;
-	private List<Position> currentPositions;
-	private List<Position> fencePositions;
-	private IntegerProperty strawberriesLeft = new SimpleIntegerProperty();
-	private IntegerProperty playersTurn = new SimpleIntegerProperty();
-	private ObjectProperty<Optional<Player>> winner = new SimpleObjectProperty<>();
 	
+	private List<Player> players;
+	private List<Position> initPositions;
+	private List<Position> piecePositions;
+	
+	transient private IntegerProperty strawberriesLeft = new SimpleIntegerProperty();
+	transient private IntegerProperty playersTurn = new SimpleIntegerProperty();
+	transient private ObjectProperty<Optional<Player>> winner = new SimpleObjectProperty<>();
+	
+
+	/**
+	 * reading Game from ObjectInputStream
+	 * @param ois
+	 */
+	private void readObject(ObjectInputStream ois) {
+
+		try {
+			ois.defaultReadObject();
+			strawberriesLeft = new SimpleIntegerProperty(ois.readInt());
+			playersTurn = new SimpleIntegerProperty(ois.readInt());
+			winner = new SimpleObjectProperty<Optional<Player>>();
+			
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * writing object to ObjectOutputStream
+	 * @param oos
+	 */
+	private void writeObject(ObjectOutputStream oos) {
+		try {
+			oos.defaultWriteObject();
+			oos.writeInt(strawberriesLeft.get());
+			oos.writeInt(playersTurn.get());
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
 	
 
 	/**
@@ -92,13 +137,12 @@ public class Game {
 	private void layoutField() {
 		
 		// create positions
-		List<Position> piecePositions = List.of(new Position(0, 0), new Position(numColumns-1, numRows-1));
-		currentPositions = new ArrayList<>(piecePositions);
+		piecePositions = new ArrayList<Position>(List.of(new Position(0, 0), new Position(numColumns-1, numRows-1)));
 		initPositions = new ArrayList<>(piecePositions);
 		
 		// create fence positions
 		
-		fencePositions = List.of(new Position(numColumns/2-2,  numRows/2), new Position(numColumns/2-1,  numRows/2), new Position(numColumns/2, numRows/2),
+		List<Position> fencePositions = List.of(new Position(numColumns/2-2,  numRows/2), new Position(numColumns/2-1,  numRows/2), new Position(numColumns/2, numRows/2),
 									new Position(numColumns/2+1, numRows/2), new Position(numColumns/2+2,  numRows/2));
 		
 		for (Position p : fencePositions) {
@@ -120,8 +164,8 @@ public class Game {
 		
 		
 		// layout items at positions
-		field.setItemAtPosition(piecePositions.get(INDEX_PLAYER1), players.get(INDEX_PLAYER1).getItem());
-		field.setItemAtPosition(piecePositions.get(INDEX_PLAYER2), players.get(INDEX_PLAYER2).getItem());
+		field.setItemAtPosition(piecePositions.get(INDEX_PLAYER1), players.get(INDEX_PLAYER1).getPiece());
+		field.setItemAtPosition(piecePositions.get(INDEX_PLAYER2), players.get(INDEX_PLAYER2).getPiece());
 		
 		assert(strawberryPositions.size() == numStrawberries);
 		
@@ -140,7 +184,7 @@ public class Game {
 	 */
 	public void move(Move move) throws MoveException {
 		
-		Position src = currentPositions.get(playersTurn.get());
+		Position src = piecePositions.get(playersTurn.get());
 		Position dest = destinationFromMove(src, move);
 		
 		int indexOpponent = getOpponentIndex();
@@ -152,7 +196,7 @@ public class Game {
 		}
 		
 		// check if type of item at src is piece
-		if (field.getItemAtPosition(src) != players.get(playersTurn.get()).getItem()) {
+		if (field.getItemAtPosition(src) != players.get(playersTurn.get()).getPiece()) {
 			
 			throw new MoveException("Item at src position is not a piece of player" + (getPlayersTurn()+1));
 		}
@@ -167,7 +211,7 @@ public class Game {
 		// execute move
 		Item item = field.removeItemFromPosition(src);
 		field.setItemAtPosition(dest, item);
-		currentPositions.set(playersTurn.get(), dest);
+		piecePositions.set(playersTurn.get(), dest);
 		
 		// increment score when moving over strawberry
 		if (destItem instanceof Strawberry) {
@@ -184,7 +228,7 @@ public class Game {
 			}
 			
 		// put opponent's piece back to init position
-		} else if (destItem == players.get(indexOpponent).getItem()) {
+		} else if (destItem == players.get(indexOpponent).getPiece()) {
 			
 			// Note: Here we see that our design will not work for more the 2 players elegantly, because it is difficult to find out
 			// that we catch a (any) piece which is not ours. This is going to be easier if we have a class for pieces and strawberries
@@ -194,7 +238,7 @@ public class Game {
 			field.setItemAtPosition(initPosition, destItem);
 			
 			// update current position
-			currentPositions.set(indexOpponent, initPosition);
+			piecePositions.set(indexOpponent, initPosition);
 			
 		}
 	
