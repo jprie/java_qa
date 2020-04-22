@@ -8,9 +8,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import at.wifiwien.javaswe.strawberry_fields.application.Constants;
-import at.wifiwien.javaswe.strawberry_fields.model.Fence;
 import at.wifiwien.javaswe.strawberry_fields.model.Position;
 import at.wifiwien.javaswe.strawberry_fields.model.Square;
+import at.wifiwien.javaswe.strawberry_fields.model.item.Fence;
 import at.wifiwien.javaswe.strawberry_fields.model.item.Item;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;

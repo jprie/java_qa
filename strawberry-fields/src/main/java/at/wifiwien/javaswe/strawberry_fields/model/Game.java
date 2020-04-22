@@ -14,6 +14,7 @@ import java.util.stream.Stream;
 import at.wifiwien.javaswe.strawberry_fields.application.Constants;
 import at.wifiwien.javaswe.strawberry_fields.controller.MoveAtFenceException;
 import at.wifiwien.javaswe.strawberry_fields.exception.MoveException;
+import at.wifiwien.javaswe.strawberry_fields.model.item.Fence;
 import at.wifiwien.javaswe.strawberry_fields.model.item.Item;
 import at.wifiwien.javaswe.strawberry_fields.model.item.Piece;
 import at.wifiwien.javaswe.strawberry_fields.model.item.Strawberry;
