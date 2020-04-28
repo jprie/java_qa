@@ -60,7 +60,14 @@
 								<option>-Djava.rmi.server.dcg.leaseValue=30000</option>
 							</options>
 							<mainClass>at.wifiwien.javaswe.strawberry_fields.application.Main</mainClass>
-							
+							<!-- deploy to jlink image -->
+							<stripDebug>true</stripDebug>
+							<compress>2</compress>
+							<noHeaderFiles>true</noHeaderFiles>
+							<noManPages>true</noManPages>
+							<launcher>strawberryfx</launcher>
+							<jlinkImageName>strawberry</jlinkImageName>
+							<jlinkZipName>strawberryzip</jlinkZipName>
 						</configuration>
 					</execution>
 					<execution>
