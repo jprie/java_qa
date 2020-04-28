@@ -13,7 +13,7 @@ public interface GameModel {
 	
 	void loadGame();
 	
-	void saveGame();
+	boolean saveGame();
 	
 	void updateSettings(Settings settings);
 	

@@ -12,16 +12,18 @@ import at.wifiwien.javaswe.strawberry_fields.model.Game;
 
 public class GameFileIOService {
 
-	public void save(Game game) {
+	public boolean save(Game game) {
 		try (FileOutputStream out = new FileOutputStream("file");
 				ObjectOutputStream oos = new ObjectOutputStream(out)) {
 
 			oos.writeObject(game);
 			System.out.println("Game stored successfully");
-
+			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return false;
+		
 
 	}
 

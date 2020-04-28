@@ -70,7 +70,8 @@ public class Square implements Serializable {
 	@Override
 	public String toString() {
 	
-		return item.get().toString();
+		Item i = item.get();
+		return i != null ? i.toString() : " ";
 	}
 	
 	
