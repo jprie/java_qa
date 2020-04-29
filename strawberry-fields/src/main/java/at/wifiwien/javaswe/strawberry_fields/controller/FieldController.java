@@ -117,6 +117,8 @@ public class FieldController extends CommonPropertiesController {
 		fieldView.setPrefColumns(width);
 		fieldLayoutDone.set(true);
 		
+		
+		
 
 	}
 

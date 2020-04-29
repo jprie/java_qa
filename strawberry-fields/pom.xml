@@ -5,7 +5,7 @@
 
 	<groupId>at.wifiwien.javaswe</groupId>
 	<artifactId>strawberry-fields</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.0</version>
 	<packaging>jar</packaging>
 
 	<name>Strawberry fields</name>
