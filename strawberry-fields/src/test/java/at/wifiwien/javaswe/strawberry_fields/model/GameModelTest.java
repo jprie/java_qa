@@ -2,6 +2,7 @@ package at.wifiwien.javaswe.strawberry_fields.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.runner.JUnitPlatform;
@@ -15,11 +16,6 @@ import at.wifiwien.javaswe.strawberry_fields.service.GameFileIOService;
 class GameModelTest {
 
 	private GameModel model;
-	
-	public GameModelTest() {
-	
-		System.out.println("Created Test environment");
-	}
 	
 	@BeforeEach
 	void initGameModel() {
@@ -74,7 +70,12 @@ class GameModelTest {
 		}
 		
 		assertEquals(model.getGame().getPlayersTurn(), Game.INDEX_PLAYER2);
-
+	}
+	
+	@AfterAll
+	static void clearAll() {
+		
+		System.out.println("Called after all");
 		
 	}
 

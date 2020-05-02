@@ -38,13 +38,14 @@ public class GameModelImpl implements GameModel {
 
 	@Override
 	public void loadGame() {
-		// TODO Auto-generated method stub
+		
 		game.set(fileService.load().orElseThrow());
 	}
 
 	@Override
 	public boolean saveGame() {
 
+		/* complex functionality */
 		return fileService.save(game.get());
 
 	}

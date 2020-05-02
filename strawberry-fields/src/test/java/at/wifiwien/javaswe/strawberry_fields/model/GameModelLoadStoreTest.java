@@ -34,9 +34,9 @@ public class GameModelLoadStoreTest {
 	}
 	
 	@Test
-	void storeGame() {
+	void testSaveGameOk() {
 		
-		
+		// define constant logic for method save in fileService-Mock
 		Mockito.lenient().when(fileService.save(model.getGame())).thenReturn(true);
 		
 		boolean ok = model.saveGame();
@@ -46,14 +46,16 @@ public class GameModelLoadStoreTest {
 	}
 	
 	@Test
-	void loadGame() {
+	void testLoadGameReturnsGivenGame() {
 		
 		Game game = new Game(new Settings("John", "Andrea", 8, 8, 12));
 		
 		Mockito.lenient().when(fileService.load()).thenReturn(Optional.of(game));
 		
+		// execute load game sets new Game in model
 		model.loadGame();
 		
+		// get game from model
 		assertEquals(game, model.getGame());
 		
 	}

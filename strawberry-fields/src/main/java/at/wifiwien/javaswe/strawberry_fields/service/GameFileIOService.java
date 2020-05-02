@@ -31,7 +31,8 @@ public class GameFileIOService {
 
 		Game game = null;
 
-		try (FileInputStream in = new FileInputStream("file"); ObjectInputStream ois = new ObjectInputStream(in)) {
+		try (FileInputStream in = new FileInputStream("file");
+				ObjectInputStream ois = new ObjectInputStream(in)) {
 
 			try {
 				game = (Game) ois.readObject();
